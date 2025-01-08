@@ -2,8 +2,30 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:crossLaunch="clr-namespace:CrossLaunch"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CrossLaunch.MainWindow"
-        Title="CrossLaunch">
-    Welcome to Avalonia!
+        Title="CrossLaunch"
+        WindowState="Maximized"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+        ExtendClientAreaToDecorationsHint="True">
+  <Panel>
+    <ExperimentalAcrylicBorder IsHitTestVisible="False">
+      <ExperimentalAcrylicBorder.Material>
+        <ExperimentalAcrylicMaterial
+          BackgroundSource="Digger"
+          TintColor="Black"
+          TintOpacity="1"
+          MaterialOpacity="0.65" />
+      </ExperimentalAcrylicBorder.Material>
+    </ExperimentalAcrylicBorder>
+    <Grid RowDefinitions="Auto,*" Margin="20">
+      <TextBlock Grid.Row="0" FontWeight="Bold" FontSize="36" TextAlignment="Center" Padding="20" Foreground="White"
+                 FontFamily="">
+        CrossLaunch
+      </TextBlock>
+      <crossLaunch:GameSelection Grid.Row="1" IsHitTestVisible="True" />
+    </Grid>
+  </Panel>
 </Window>
