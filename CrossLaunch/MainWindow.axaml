@@ -6,6 +6,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CrossLaunch.MainWindow"
         Title="CrossLaunch"
+        Icon="/Assets/img/CrossLaunch-Logo7_80x80.png"
         WindowState="Maximized"
         TransparencyLevelHint="AcrylicBlur"
         Background="Transparent"
@@ -21,10 +22,13 @@
       </ExperimentalAcrylicBorder.Material>
     </ExperimentalAcrylicBorder>
     <Grid RowDefinitions="Auto,*" Margin="20">
-      <TextBlock Grid.Row="0" FontWeight="Bold" FontSize="36" TextAlignment="Center" Padding="20" Foreground="White"
-                 FontFamily="">
-        CrossLaunch
-      </TextBlock>
+      <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="20,0,0,0" VerticalAlignment="Center">
+        <Image Source="Assets/img/CrossLaunch-Logo7_80x80.png" Width="80" Height="80" ></Image>
+        <TextBlock  FontWeight="Bold" FontSize="36" TextAlignment="Center" Padding="20" Foreground="White"
+                   FontFamily="">
+          CrossLaunch
+        </TextBlock>
+      </StackPanel>
       <crossLaunch:GameSelection Grid.Row="1" IsHitTestVisible="True" />
     </Grid>
   </Panel>
