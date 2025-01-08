@@ -26,8 +26,14 @@ jobs:
       - name: Install .NET dependencies
         run: dotnet restore
 
+      - name: Extract version from tag
+        run: |
+          # Extract the version from the tag (e.g., 'refs/tags/v1.2.3' -> '1.2.3')
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
       - name: Publish for ${{ matrix.runtime }}
-        run: dotnet publish -c Release -r ${{ matrix.runtime }} --no-restore
+        run: dotnet publish -c Release -r ${{ matrix.runtime }} -p:Version=${{ env.VERSION }} -p:FileVersion=${{ env.VERSION }} -p:AssemblyName=CrossLaunch-${{ env.VERSION }} --no-restore
 
       - name: Test
         run: dotnet test -c Release --no-restore --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx" --results-directory dist/tests --collect:"XPlat Code Coverage"
@@ -49,12 +55,6 @@ jobs:
       - name: Lint
         run: dotnet csharpier --check .
 
-      - name: Extract version from tag
-        run: |
-          # Extract the version from the tag (e.g., 'refs/tags/v1.2.3' -> '1.2.3')
-          VERSION=${GITHUB_REF#refs/tags/v}
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-
       - name: Archive ${{ matrix.runtime }} artifacts
         shell: bash
         run: |
@@ -63,10 +63,10 @@ jobs:
 
           if [[ "${{ matrix.runtime }}" == win-* ]]; then
             OUTPUT_FILE="CrossLaunch-${{ env.VERSION }}-${{ matrix.runtime }}.zip"
-            zip -r $OUTPUT_FILE $PUBLISH_DIR
+            zip -rj $OUTPUT_FILE $PUBLISH_DIR
           else
             OUTPUT_FILE="CrossLaunch-${{ env.VERSION }}-${{ matrix.runtime }}.tar.gz"
-            tar -czvf $OUTPUT_FILE -C $PUBLISH_DIR
+            tar -czvf $OUTPUT_FILE -C $PUBLISH_DIR .
           fi
 
           echo "ARCHIVE_PATH=$(realpath $OUTPUT_FILE)" >> $GITHUB_ENV
