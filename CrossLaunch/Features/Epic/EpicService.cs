@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using CrossLaunch.Utils;
 
 namespace CrossLaunch.Features.Epic;
 
@@ -55,7 +56,7 @@ public class EpicService
       var manifestContent = await File.ReadAllTextAsync(manifestFile, ct);
       var manifest = JsonSerializer.Deserialize<EpicManifest>(
         manifestContent,
-        new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+        CustomJsonSerializerContext.Default.EpicManifest
       );
 
       if (manifest is null)

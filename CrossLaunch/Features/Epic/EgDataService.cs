@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using CrossLaunch.Utils;
 
 namespace CrossLaunch.Features.Epic;
 
@@ -23,7 +24,9 @@ public class EgDataService
     if (!response.IsSuccessStatusCode)
       return null;
 
-    var items = await response.Content.ReadFromJsonAsync<List<EgDataItem>>();
+    var items = await response.Content.ReadFromJsonAsync<List<EgDataItem>>(
+      CustomJsonSerializerContext.Default.ListEgDataItem
+    );
 
     if (items is null)
       return null;
