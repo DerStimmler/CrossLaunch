@@ -39,3 +39,7 @@ CrossLaunch lets you start all your games from Steam, bringing Steam's powerful 
 3. Run app `dotnet run --project CrossLaunch`
 
 - Format files `dotnet csharpier .`
+
+## Shout-Out
+
+Shout-Out to [EGDATA](https://egdata.app/), whose API is used to fetch the game images.
