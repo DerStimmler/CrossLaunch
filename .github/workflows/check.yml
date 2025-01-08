@@ -1,0 +1,50 @@
+name: "check"
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        runtime: [ win-x64, linux-x64, osx-x64, osx-arm64 ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+
+      - name: Install .NET tools
+        run: dotnet tool restore
+
+      - name: Install .NET dependencies
+        run: dotnet restore
+
+      - name: Publish for ${{ matrix.runtime }}
+        run: dotnet publish -c Release -r ${{ matrix.runtime }} --no-restore
+
+      - name: Test
+        run: dotnet test -c Release --no-restore --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx" --results-directory dist/tests --collect:"XPlat Code Coverage"
+
+      - name: Upload .NET test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: dotnet-test-results
+          path: dist/tests/test-results.trx
+        if: ${{ always() }}
+
+      - name: Upload .NET test coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: dotnet-test-coverage
+          path: dist/tests/**/coverage.cobertura.xml
+        if: ${{ always() }}
+
+      - name: Lint
+        run: dotnet csharpier --check .

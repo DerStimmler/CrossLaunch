@@ -1,0 +1,86 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        runtime: [ win-x64, linux-x64, osx-x64, osx-arm64 ]
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+
+      - name: Install .NET tools
+        run: dotnet tool restore
+
+      - name: Install .NET dependencies
+        run: dotnet restore
+
+      - name: Publish for ${{ matrix.runtime }}
+        run: dotnet publish -c Release -r ${{ matrix.runtime }} --no-restore
+
+      - name: Test
+        run: dotnet test -c Release --no-restore --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx" --results-directory dist/tests --collect:"XPlat Code Coverage"
+
+      - name: Upload .NET test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: dotnet-test-results
+          path: dist/tests/test-results.trx
+        if: ${{ always() }}
+
+      - name: Upload .NET test coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: dotnet-test-coverage
+          path: dist/tests/**/coverage.cobertura.xml
+        if: ${{ always() }}
+
+      - name: Lint
+        run: dotnet csharpier --check .
+
+      - name: Extract version from tag
+        run: |
+          # Extract the version from the tag (e.g., 'refs/tags/v1.2.3' -> '1.2.3')
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Archive ${{ matrix.runtime }} artifacts
+        shell: bash
+        run: |
+          PUBLISH_DIR="CrossLaunch/bin/Release/net9.0/${{ matrix.runtime }}/publish"
+          OUTPUT_FILE=""
+
+          if [[ "${{ matrix.runtime }}" == win-* ]]; then
+            OUTPUT_FILE="CrossLaunch-${{ env.VERSION }}-${{ matrix.runtime }}.zip"
+            zip -r $OUTPUT_FILE $PUBLISH_DIR
+          else
+            OUTPUT_FILE="CrossLaunch-${{ env.VERSION }}-${{ matrix.runtime }}.tar.gz"
+            tar -czvf $OUTPUT_FILE -C $PUBLISH_DIR
+          fi
+
+          echo "ARCHIVE_PATH=$(realpath $OUTPUT_FILE)" >> $GITHUB_ENV
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CrossLaunch-${{ env.VERSION }}-${{ matrix.runtime }}
+          path: ${{ env.ARCHIVE_PATH }}
+
+      - name: Attach package to GitHub release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ env.ARCHIVE_PATH }}
+          tag: ${{ github.ref }}
+          overwrite: true
