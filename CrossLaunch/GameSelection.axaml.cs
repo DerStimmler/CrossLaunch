@@ -45,7 +45,7 @@ public partial class GameSelection : UserControl
   private async void StartGame(object? sender, PointerPressedEventArgs e)
   {
     var element = sender as Border;
-    var gameId = element.Tag.ToString();
+    var gameId = element?.Tag?.ToString();
 
     var game = Items.First(x => x.Identifier == gameId);
 
