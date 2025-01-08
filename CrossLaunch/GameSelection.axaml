@@ -21,8 +21,8 @@
     <ItemsControl.ItemTemplate>
       <DataTemplate DataType="crossLaunch:GameItemVm">
         <Border CornerRadius="10" Background="#444444" BorderThickness="4" Padding="10" Margin="20"
-                PointerPressed="StartGame" Tag="{Binding Identifier}" IsHitTestVisible="True" Width="300"
-                Height="200" Focusable="True" TabIndex="0" Name="{Binding Identifier}">
+                PointerPressed="StartGame" Tag="{Binding Identifier}" IsHitTestVisible="True" Width="450"
+                Height="300" Focusable="True" TabIndex="0" Name="{Binding Identifier}">
           <Border.Styles>
             <Style Selector="Border:pointerover, Border:focus-visible">
               <Setter Property="BorderBrush" Value="#8b5cf6" />
