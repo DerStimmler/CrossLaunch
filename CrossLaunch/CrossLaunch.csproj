@@ -3,10 +3,21 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    
+    <Title>CrossLaunch</Title>
+    <Authors>DerStimmler</Authors>
+    <Description>Launch games of various launchers from Steam</Description>
+    <Copyright>Copyright (c) DerStimmler 2025</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/DerStimmler/CrossLaunch</RepositoryUrl>
+    <PackageTags>steam, csharp, dotnet, launcher, avalonia, avaloniaui, epicgames</PackageTags>
+    
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <ApplicationIcon>Assets/Images/favicon.ico</ApplicationIcon>
+    
     <RuntimeIdentifiers>win-x64;linux-x64;osx-x64;osx-arm64</RuntimeIdentifiers>
     <PublishSingleFile>true</PublishSingleFile>
     <PublishTrimmed>true</PublishTrimmed>
