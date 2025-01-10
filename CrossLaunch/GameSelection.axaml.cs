@@ -42,8 +42,21 @@ public partial class GameSelection : UserControl
       Items.Add(game);
   }
 
-  private async void StartGame(object? sender, PointerPressedEventArgs e)
+  private async void OnPointerPressed(object? sender, PointerPressedEventArgs e)
   {
+    var element = sender as Border;
+    var gameId = element?.Tag?.ToString();
+
+    var game = Items.First(x => x.Identifier == gameId);
+
+    await _gameService.StartGame(game);
+  }
+
+  private async void OnKeyDown(object? sender, KeyEventArgs e)
+  {
+    if (e.Key != Key.Enter && e.Key != Key.Space)
+      return;
+
     var element = sender as Border;
     var gameId = element?.Tag?.ToString();
 

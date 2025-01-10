@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
+using CrossLaunch.Features.Gamepad;
 
 namespace CrossLaunch;
 
@@ -11,7 +15,23 @@ internal class Program
   [STAThread]
   public static void Main(string[] args)
   {
-    BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+    var cts = new CancellationTokenSource();
+    GamepadHandler.HandleGamepadInput(cts.Token);
+
+    BuildAvaloniaApp()
+      .StartWithClassicDesktopLifetime(
+        args,
+        lifetime =>
+        {
+          lifetime.ShutdownRequested += OnShutdownRequested;
+          return;
+
+          void OnShutdownRequested(object? sender, ShutdownRequestedEventArgs e)
+          {
+            cts.Cancel();
+          }
+        }
+      );
   }
 
   // Avalonia configuration, don't remove; also used by visual designer.
