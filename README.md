@@ -8,11 +8,13 @@
 
 # CrossLaunch
 
-[![GitHub license](https://img.shields.io/github/license/co-IT/CSharpFunctionalExtensions.HttpResults)](https://github.com/co-IT/CSharpFunctionalExtensions.HttpResults/blob/main/LICENSE.md)
+[![GitHub license](https://img.shields.io/github/license/DerStimmler/CrossLaunch)](https://github.com/DerStimmler/CrossLaunch/blob/main/LICENSE.md)
 
-Launch games of various launchers from Steam
+**Launch your games from various launchers through Steam**
 
-CrossLaunch lets you start all your games from Steam, bringing Steam's powerful features like controller support and Steam Overlay to games from other launchers. It simplifies your gaming experience by unifying your library and enhancing compatibility, so you can enjoy every game with the convenience of Steam.
+CrossLaunch allows you to seamlessly launch games from various platforms directly through Steam. This means you can enjoy Steam's robust features—like controller support and the Steam Overlay—even when playing games from other launchers.
+
+Prefer a standalone setup? CrossLaunch works independently of Steam too, offering a streamlined way to unify your game library for a simpler, more convenient gaming experience.
 
 ## Usage
 
@@ -20,17 +22,24 @@ CrossLaunch lets you start all your games from Steam, bringing Steam's powerful 
 2. Extract the archive
 3. In your Steam library, add the executable as a Non-Steam Game
 
-   | Add Non-Steam Game                                                               | Browse for executable                                                                       |
-   |----------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-   | <img src="assets/docs/non-steam-game.png" alt="add non steam game" height="80"/> | <img src="assets/docs/non-steam-game-browse.png" alt="browse for executable" height="170"/> |
+   <details>
+      <summary>
+          How to do that?
+      </summary>
+      
+   | Add Non-Steam Game                                                              | Browse for executable                                                                      |
+   |---------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|
+   | <img src="assets/docs/non-steam-game.png" alt="add non steam game"/> | <img src="assets/docs/non-steam-game-browse.png" alt="browse for executable"/> |
+   </details>
+
 4. Start CrossLaunch through Steam by clicking _Play_
 5. Select a game in the CrossLaunch launcher
    
-    <img src="assets/docs/cross-launch-game-selection.png" alt="select game in CrossLaunch launcher" height="200"/>
+    <img src="assets/docs/cross-launch-game-selection.png" alt="select game in CrossLaunch launcher"/>
 
 ## Supported Launchers
 
-- Epic Games Store
+- Epic Games Launcher
 
 ## Development
 
