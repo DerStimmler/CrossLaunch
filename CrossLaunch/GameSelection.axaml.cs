@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -14,6 +15,15 @@ public partial class GameSelection : UserControl
     ObservableCollection<GameItemVm>
   >(nameof(Items));
 
+  public static readonly StyledProperty<bool> IsGameRunningProperty = AvaloniaProperty.Register<GameSelection, bool>(
+    nameof(IsGameRunning)
+  );
+
+  public static readonly StyledProperty<string> RunningGameNameProperty = AvaloniaProperty.Register<
+    GameSelection,
+    string
+  >(nameof(RunningGameName));
+
   private readonly GameService _gameService;
 
   public GameSelection()
@@ -26,6 +36,18 @@ public partial class GameSelection : UserControl
     _gameService = new GameService();
 
     Foo();
+  }
+
+  public bool IsGameRunning
+  {
+    get => GetValue(IsGameRunningProperty);
+    set => SetValue(IsGameRunningProperty, value);
+  }
+
+  public string RunningGameName
+  {
+    get => GetValue(RunningGameNameProperty);
+    set => SetValue(RunningGameNameProperty, value);
   }
 
   public ObservableCollection<GameItemVm> Items
@@ -47,9 +69,20 @@ public partial class GameSelection : UserControl
     var element = sender as Border;
     var gameId = element?.Tag?.ToString();
 
+    await StartGame(gameId!);
+  }
+
+  private async Task StartGame(string gameId)
+  {
+    if (IsGameRunning)
+      return;
+
     var game = Items.First(x => x.Identifier == gameId);
 
+    RunningGameName = game.DisplayName;
+    IsGameRunning = true;
     await _gameService.StartGame(game);
+    IsGameRunning = false;
   }
 
   private async void OnKeyDown(object? sender, KeyEventArgs e)
@@ -60,8 +93,6 @@ public partial class GameSelection : UserControl
     var element = sender as Border;
     var gameId = element?.Tag?.ToString();
 
-    var game = Items.First(x => x.Identifier == gameId);
-
-    await _gameService.StartGame(game);
+    await StartGame(gameId!);
   }
 }
