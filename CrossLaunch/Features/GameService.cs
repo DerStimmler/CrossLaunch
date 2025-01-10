@@ -25,7 +25,7 @@ public class GameService
       {
         Identifier = game.Manifest.CatalogItemId,
         DisplayName = game.Manifest.DisplayName,
-        Store = "Epic Games Store",
+        Launcher = "Epic Games Launcher",
         ImageUrl = game.ImageUri,
       })
       .ToList();
