@@ -12,49 +12,59 @@
              XYFocus.LeftNavigationStrategy="Projection"
              XYFocus.RightNavigationStrategy="Projection"
              x:DataType="crossLaunch:GameSelection">
-  <ScrollViewer>
-    <ItemsControl x:Name="ItemsControl" ItemsSource="{Binding Items}">
-      <ItemsControl.ItemsPanel>
-        <ItemsPanelTemplate>
-          <WrapPanel />
-        </ItemsPanelTemplate>
-      </ItemsControl.ItemsPanel>
-      <ItemsControl.ItemTemplate>
-        <DataTemplate DataType="crossLaunch:GameItemVm">
-          <Border CornerRadius="10" Background="#444444" BorderThickness="4" Padding="10" Margin="20"
-                  KeyDown="OnKeyDown" PointerPressed="OnPointerPressed" Tag="{Binding Identifier}"
-                  IsHitTestVisible="True" Width="450"
-                  Height="300" Focusable="True" TabIndex="0" Name="{Binding Identifier}">
-            <Border.Styles>
-              <Style Selector="Border:pointerover, Border:focus-visible">
-                <Setter Property="BorderBrush" Value="#8b5cf6" />
-              </Style>
-              <Style Selector="Border">
-                <Setter Property="BorderBrush" Value="#121212" />
-                <Setter Property="Transitions">
-                  <Transitions>
-                    <BrushTransition Property="BorderBrush" Duration="0:0:0.15" />
-                  </Transitions>
-                </Setter>
-                <Setter Property="FocusAdorner">
-                  <FocusAdornerTemplate>
-                    <!-- EMPTY -->
-                  </FocusAdornerTemplate>
-                </Setter>
-              </Style>
-            </Border.Styles>
-            <DockPanel LastChildFill="True">
-              <TextBlock Text="{Binding Launcher}" Opacity="0.5" Foreground="White" FontSize="12" FontWeight="Bold"
-                         Margin="0 5 0 0"
-                         TextWrapping="Wrap" DockPanel.Dock="Bottom" />
-              <TextBlock Text="{Binding DisplayName}" Foreground="White" FontSize="16" FontWeight="Bold"
-                         Margin="0 5 0 0"
-                         TextWrapping="Wrap" DockPanel.Dock="Bottom" Padding="0,5,0,0" />
-              <Image asyncImageLoader:ImageLoader.Source="{Binding ImageUrl}" Stretch="UniformToFill" />
-            </DockPanel>
-          </Border>
-        </DataTemplate>
-      </ItemsControl.ItemTemplate>
-    </ItemsControl>
-  </ScrollViewer>
+  <Grid>
+    <ScrollViewer>
+      <ItemsControl x:Name="ItemsControl" ItemsSource="{Binding Items}">
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <WrapPanel />
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+          <DataTemplate DataType="crossLaunch:GameItemVm">
+            <Border CornerRadius="10" Background="#444444" BorderThickness="4" Padding="10" Margin="20"
+                    KeyDown="OnKeyDown" PointerPressed="OnPointerPressed" Tag="{Binding Identifier}"
+                    IsHitTestVisible="True" Width="450"
+                    Height="300" Focusable="True" TabIndex="0" Name="{Binding Identifier}">
+              <Border.Styles>
+                <Style Selector="Border:pointerover, Border:focus-visible">
+                  <Setter Property="BorderBrush" Value="#8b5cf6" />
+                </Style>
+                <Style Selector="Border">
+                  <Setter Property="BorderBrush" Value="#121212" />
+                  <Setter Property="Transitions">
+                    <Transitions>
+                      <BrushTransition Property="BorderBrush" Duration="0:0:0.15" />
+                    </Transitions>
+                  </Setter>
+                  <Setter Property="FocusAdorner">
+                    <FocusAdornerTemplate>
+                      <!-- EMPTY -->
+                    </FocusAdornerTemplate>
+                  </Setter>
+                </Style>
+              </Border.Styles>
+              <DockPanel LastChildFill="True">
+                <TextBlock Text="{Binding Launcher}" Opacity="0.5" Foreground="White" FontSize="12" FontWeight="Bold"
+                           Margin="0 5 0 0"
+                           TextWrapping="Wrap" DockPanel.Dock="Bottom" />
+                <TextBlock Text="{Binding DisplayName}" Foreground="White" FontSize="16" FontWeight="Bold"
+                           Margin="0 5 0 0"
+                           TextWrapping="Wrap" DockPanel.Dock="Bottom" Padding="0,5,0,0" />
+                <Image asyncImageLoader:ImageLoader.Source="{Binding ImageUrl}" Stretch="UniformToFill" />
+              </DockPanel>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </ScrollViewer>
+    <Grid x:Name="Overlay" Background="#9000" IsVisible="{Binding IsGameRunning}">
+      <TextBlock Text="{Binding RunningGameName, StringFormat='{}{0} is running...'}"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center"
+                 Foreground="White"
+                 FontWeight="Bold"
+                 FontSize="32" />
+    </Grid>
+  </Grid>
 </UserControl>
