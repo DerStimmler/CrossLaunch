@@ -23,8 +23,8 @@
     </ExperimentalAcrylicBorder>
     <Grid RowDefinitions="Auto,*" Margin="20">
       <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="20,0,0,0" VerticalAlignment="Center">
-        <Image Source="Assets/Images/CrossLaunch-Logo7_80x80.png" Width="80" Height="80" ></Image>
-        <TextBlock  FontWeight="Bold" FontSize="36" TextAlignment="Center" Padding="20" Foreground="White"
+        <Image Source="Assets/Images/CrossLaunch-Logo7_80x80.png" Width="80" Height="80" />
+        <TextBlock FontWeight="Bold" FontSize="36" TextAlignment="Center" Padding="20" Foreground="White"
                    FontFamily="">
           CrossLaunch
         </TextBlock>

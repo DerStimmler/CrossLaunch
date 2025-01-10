@@ -1,7 +1,9 @@
-﻿namespace CrossLaunch.Utils;
+﻿using System.Text.Json;
+
+namespace CrossLaunch.Utils;
 
 public class CustomJsonSerializerOptions
 {
-  public static System.Text.Json.JsonSerializerOptions Default =>
+  public static JsonSerializerOptions Default =>
     new() { PropertyNameCaseInsensitive = true, TypeInfoResolver = CustomJsonSerializerContext.Default };
 }

@@ -8,9 +8,9 @@ namespace CrossLaunch.Features.Gamepad;
 public class GamepadInput
 {
   private readonly Controller _controller = new(UserIndex.One);
-  private GamepadButtonFlags _previousButtons; //For fixing holding the button down
-  private bool _isRunning;
   private readonly int _pollingInterval;
+  private bool _isRunning;
+  private GamepadButtonFlags _previousButtons; //For fixing holding the button down
 
   public GamepadInput(int pollingInterval = 50)
   {
