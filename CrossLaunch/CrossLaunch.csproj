@@ -44,7 +44,9 @@
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="InputSimulator" Version="1.0.4" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0"/>
+    <PackageReference Include="SharpDX.XInput" Version="4.2.0" />
   </ItemGroup>
 
   <ItemGroup>
