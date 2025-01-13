@@ -1,44 +1,26 @@
 ﻿using System.Threading;
-using WindowsInput;
-using WindowsInput.Native;
+using Silk.NET.Input;
 
 namespace CrossLaunch.Features.Gamepad;
 
 public class GamepadHandler
 {
-  private static readonly KeyboardSimulator KeyboardSimulator = new(new InputSimulator());
+  private static IKeySimulator? _keySimulator;
 
-  public static void HandleGamepadInput(CancellationToken ct)
+  public static void HandleGamepadInput(IInputContext inputContext, CancellationToken ct)
   {
-    var gamepadInput = new GamepadInput();
+    _keySimulator = KeySimulatorFactory.CreateSimulator();
 
-    gamepadInput.ButtonPressed += direction =>
+    if (_keySimulator is null)
+      return;
+
+    var gamepadInput = new GamepadInput(inputContext);
+
+    gamepadInput.ButtonPressed += key =>
     {
-      SimulateArrowKeyPress(direction);
+      _keySimulator.SimulateKeyPress(key);
     };
 
     gamepadInput.StartPollingAsync(ct);
-  }
-
-  private static void SimulateArrowKeyPress(string direction)
-  {
-    switch (direction)
-    {
-      case "Up":
-        KeyboardSimulator.KeyPress(VirtualKeyCode.UP);
-        break;
-      case "Down":
-        KeyboardSimulator.KeyPress(VirtualKeyCode.DOWN);
-        break;
-      case "Left":
-        KeyboardSimulator.KeyPress(VirtualKeyCode.LEFT);
-        break;
-      case "Right":
-        KeyboardSimulator.KeyPress(VirtualKeyCode.RIGHT);
-        break;
-      case "A":
-        KeyboardSimulator.KeyPress(VirtualKeyCode.RETURN);
-        break;
-    }
   }
 }

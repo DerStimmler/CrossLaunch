@@ -1,23 +1,25 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using SharpDX.XInput;
+using Silk.NET.Input;
 
 namespace CrossLaunch.Features.Gamepad;
 
 public class GamepadInput
 {
-  private readonly Controller _controller = new(UserIndex.One);
+  private readonly IInputContext _inputContext;
   private readonly int _pollingInterval;
   private bool _isRunning;
-  private GamepadButtonFlags _previousButtons; //For fixing holding the button down
+  private Button? _previousButton; // For fixing holding the button down
 
-  public GamepadInput(int pollingInterval = 50)
+  public GamepadInput(IInputContext inputContext, int pollingInterval = 50)
   {
+    _inputContext = inputContext;
     _pollingInterval = pollingInterval;
   }
 
-  public event Action<string> ButtonPressed = null!;
+  public event Action<string>? ButtonPressed;
 
   public void StartPollingAsync(CancellationToken ct)
   {
@@ -45,26 +47,48 @@ public class GamepadInput
 
   private void UpdateState()
   {
-    if (!_controller.IsConnected)
+    var controller = _inputContext.Gamepads.Count > 0 ? _inputContext.Gamepads[0] : null;
+
+    if (controller is not { IsConnected: true })
       return;
 
-    var state = _controller.GetState();
-    var buttons = state.Gamepad.Buttons;
-
-    if (buttons == _previousButtons)
+    // Clear the previous button state if no button is pressed
+    if (!controller.Buttons.Any(b => b.Pressed))
+    {
+      _previousButton = null;
       return;
+    }
 
-    if (buttons.HasFlag(GamepadButtonFlags.DPadUp))
-      ButtonPressed("Up");
-    else if (buttons.HasFlag(GamepadButtonFlags.DPadDown))
-      ButtonPressed("Down");
-    else if (buttons.HasFlag(GamepadButtonFlags.DPadLeft))
-      ButtonPressed("Left");
-    else if (buttons.HasFlag(GamepadButtonFlags.DPadRight))
-      ButtonPressed("Right");
-    else if (buttons.HasFlag(GamepadButtonFlags.A) && !_previousButtons.HasFlag(GamepadButtonFlags.A))
-      ButtonPressed("A");
+    foreach (var button in controller.Buttons)
+    {
+      if (!button.Pressed || (_previousButton is not null && _previousButton.Value.Name == button.Name))
+        continue;
 
-    _previousButtons = buttons;
+      PublishButtonPressedEvent(button);
+
+      _previousButton = button;
+    }
+  }
+
+  private void PublishButtonPressedEvent(Button button)
+  {
+    switch (button.Name)
+    {
+      case ButtonName.DPadUp:
+        ButtonPressed?.Invoke("Up");
+        break;
+      case ButtonName.DPadDown:
+        ButtonPressed?.Invoke("Down");
+        break;
+      case ButtonName.DPadLeft:
+        ButtonPressed?.Invoke("Left");
+        break;
+      case ButtonName.DPadRight:
+        ButtonPressed?.Invoke("Right");
+        break;
+      case ButtonName.A:
+        ButtonPressed?.Invoke("A");
+        break;
+    }
   }
 }

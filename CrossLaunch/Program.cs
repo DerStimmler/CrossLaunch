@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using CrossLaunch.Features.Gamepad;
+using Silk.NET.Input;
+using Silk.NET.Windowing;
 
 namespace CrossLaunch;
 
@@ -15,7 +18,16 @@ internal class Program
   public static void Main(string[] args)
   {
     var cts = new CancellationTokenSource();
-    GamepadHandler.HandleGamepadInput(cts.Token);
+    var options = WindowOptions.Default;
+    options.IsVisible = false; // We don't need this window visible
+    var silkWindow = Window.Create(options);
+
+    silkWindow.Load += () =>
+    {
+      GamepadHandler.HandleGamepadInput(silkWindow.CreateInput(), cts.Token);
+    };
+
+    Task.Run(() => silkWindow.Run(), cts.Token);
 
     BuildAvaloniaApp()
       .StartWithClassicDesktopLifetime(
