@@ -21,11 +21,10 @@
           MaterialOpacity="0.65" />
       </ExperimentalAcrylicBorder.Material>
     </ExperimentalAcrylicBorder>
-    <Grid RowDefinitions="Auto,*" Margin="20">
+    <Grid RowDefinitions="Auto,*" Margin="40,50,40,40">
       <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="20,0,20,20" VerticalAlignment="Center">
         <Image Source="Assets/Images/CrossLaunch-Logo7_80x80.png" Width="80" Height="80" />
-        <TextBlock FontWeight="Bold" FontSize="36" TextAlignment="Center" Padding="20" Foreground="White"
-                   FontFamily="">
+        <TextBlock FontWeight="Bold" FontSize="36" TextAlignment="Center" Padding="20" Foreground="White">
           CrossLaunch
         </TextBlock>
       </StackPanel>
