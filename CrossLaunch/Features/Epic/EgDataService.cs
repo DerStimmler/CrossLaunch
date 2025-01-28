@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using CrossLaunch.Utils;
+using Serilog;
 
 namespace CrossLaunch.Features.Epic;
 
@@ -19,18 +20,23 @@ public class EgDataService
 
   public async Task<EgDataItem?> FindGame(string @namespace, string gameId)
   {
-    var response = await _http.GetAsync($"/sandboxes/{@namespace}/items");
+    try
+    {
+      var response = await _http.GetAsync($"/sandboxes/{@namespace}/items");
 
-    if (!response.IsSuccessStatusCode)
+      if (!response.IsSuccessStatusCode)
+        return null;
+
+      var items = await response.Content.ReadFromJsonAsync<List<EgDataItem>>(
+        CustomJsonSerializerContext.Default.ListEgDataItem
+      );
+
+      return items?.FirstOrDefault(item => item.Id == gameId);
+    }
+    catch (Exception e)
+    {
+      Log.Error(e, "Couldn't load epic game {Namespace}, {GameId} from egdata", @namespace, gameId);
       return null;
-
-    var items = await response.Content.ReadFromJsonAsync<List<EgDataItem>>(
-      CustomJsonSerializerContext.Default.ListEgDataItem
-    );
-
-    if (items is null)
-      return null;
-
-    return items.FirstOrDefault(item => item.Id == gameId);
+    }
   }
 }

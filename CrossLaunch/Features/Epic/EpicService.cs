@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using CrossLaunch.Utils;
+using Serilog;
 
 namespace CrossLaunch.Features.Epic;
 
@@ -29,10 +30,7 @@ public class EpicService
     {
       var gameInfo = await _egDataService.FindGame(manifest.CatalogNamespace, manifest.CatalogItemId);
 
-      if (gameInfo is null)
-        continue;
-
-      var imageUri = gameInfo.KeyImages.FirstOrDefault()?.Url ?? "https://placehold.co/600x400";
+      var imageUri = gameInfo?.KeyImages.FirstOrDefault()?.Url ?? "https://placehold.co/600x400";
 
       var game = new EpicGame(manifest, new Uri(imageUri));
 
@@ -46,6 +44,8 @@ public class EpicService
   {
     var programDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
     var epicManifestsFolder = Path.Combine(programDataFolder, "Epic", "EpicGamesLauncher", "Data", "Manifests");
+
+    Log.Information("Getting Epic Manifests from {ManifestPath}", epicManifestsFolder);
 
     var manifestFiles = Directory.GetFiles(epicManifestsFolder, "*.item");
 

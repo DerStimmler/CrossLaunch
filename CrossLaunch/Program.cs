@@ -1,9 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using CrossLaunch.Features.Gamepad;
+using Serilog;
 using Silk.NET.Input;
 using Silk.NET.Windowing;
 
@@ -18,35 +20,62 @@ internal class Program
   public static void Main(string[] args)
   {
     var cts = new CancellationTokenSource();
-    var options = WindowOptions.Default;
-    options.IsVisible = false; // We don't need this window visible
-    var silkWindow = Window.Create(options);
 
-    silkWindow.Load += () =>
+    ConfigureLogging();
+
+    try
     {
-      GamepadHandler.HandleGamepadInput(silkWindow.CreateInput(), cts.Token);
-    };
+      var options = WindowOptions.Default;
+      options.IsVisible = false; // We don't need this window visible
+      var silkWindow = Window.Create(options);
 
-    Task.Run(() => silkWindow.Run(), cts.Token);
+      silkWindow.Load += () =>
+      {
+        GamepadHandler.HandleGamepadInput(silkWindow.CreateInput(), cts.Token);
+      };
 
-    BuildAvaloniaApp()
-      .StartWithClassicDesktopLifetime(
-        args,
-        lifetime =>
-        {
-          lifetime.ShutdownRequested += OnShutdownRequested;
-          return;
+      Task.Run(() => silkWindow.Run(), cts.Token);
 
-          void OnShutdownRequested(object? sender, ShutdownRequestedEventArgs e)
+      BuildAvaloniaApp()
+        .StartWithClassicDesktopLifetime(
+          args,
+          lifetime =>
           {
-            cts.Cancel();
+            lifetime.ShutdownRequested += OnShutdownRequested;
+            return;
+
+            void OnShutdownRequested(object? sender, ShutdownRequestedEventArgs e)
+            {
+              cts.Cancel();
+            }
           }
-        }
-      );
+        );
+    }
+    catch (Exception e)
+    {
+      Log.Fatal(e, "Something very bad happened");
+    }
+    finally
+    {
+      Log.CloseAndFlush();
+    }
+  }
+
+  private static void ConfigureLogging()
+  {
+    var logPath = Path.Combine(
+      Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+      "CrossLaunch",
+      "log.txt"
+    );
+
+    using var log = new LoggerConfiguration().WriteTo.Console().WriteTo.File(logPath).CreateLogger();
+
+    Log.Logger = log;
   }
 
   // Avalonia configuration, don't remove; also used by visual designer.
-  public static AppBuilder BuildAvaloniaApp()
+  private static AppBuilder BuildAvaloniaApp()
   {
     return AppBuilder.Configure<App>().UsePlatformDetect().WithInterFont().LogToTrace();
   }
