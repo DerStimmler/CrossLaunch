@@ -21,7 +21,9 @@
 
     <RuntimeIdentifiers>win-x64;linux-x64;osx-x64;osx-arm64</RuntimeIdentifiers>
     <PublishSingleFile>true</PublishSingleFile>
-<!--    <PublishTrimmed>true</PublishTrimmed>-->
+    <PublishTrimmed>true</PublishTrimmed>
+    <TrimMode>partial</TrimMode>
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
     <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
     <SelfContained>true</SelfContained>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
@@ -55,4 +57,8 @@
   <ItemGroup>
     <AvaloniaResource Include="Assets\**"/>
   </ItemGroup>
+
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);IL2026;IL2104</NoWarn>
+  </PropertyGroup>
 </Project>
