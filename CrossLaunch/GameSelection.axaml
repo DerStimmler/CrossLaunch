@@ -58,13 +58,15 @@
         </ItemsControl.ItemTemplate>
       </ItemsControl>
     </ScrollViewer>
-    <Grid x:Name="Overlay" Background="#9000" IsVisible="{Binding IsGameRunning}">
-      <TextBlock Text="{Binding RunningGameName, StringFormat='{}{0} is running...'}"
-                 HorizontalAlignment="Center"
-                 VerticalAlignment="Center"
-                 Foreground="White"
-                 FontWeight="Bold"
-                 FontSize="32" />
-    </Grid>
+    <Border x:Name="Overlay" Background="#9000" IsVisible="{Binding IsGameRunning}" CornerRadius="10">
+      <Grid>
+        <TextBlock Text="{Binding RunningGameName, StringFormat='{}{0} is running...'}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Foreground="White"
+                   FontWeight="Bold"
+                   FontSize="32" />
+      </Grid>
+    </Border>
   </Grid>
 </UserControl>
