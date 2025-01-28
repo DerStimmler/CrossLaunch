@@ -41,6 +41,10 @@ Prefer a standalone setup? CrossLaunch works independently of Steam too, offerin
 
 - Epic Games Launcher
 
+## Troubleshooting
+
+Log files are in `%LOCALAPPDATA%/CrossLaunch`.
+
 ## Development
 
 1. Restore dotnet dependencies `dotnet restore`
