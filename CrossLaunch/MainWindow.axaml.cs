@@ -1,4 +1,3 @@
-using System;
 using System.Reflection;
 using Avalonia;
 using Avalonia.Controls;
@@ -8,6 +7,18 @@ namespace CrossLaunch;
 
 public partial class MainWindow : Window
 {
+  public static readonly StyledProperty<bool> IsUpdateAvailableProperty = AvaloniaProperty.Register<MainWindow, bool>(
+    nameof(IsUpdateAvailable)
+  );
+
+  public static readonly StyledProperty<string> CurrentVersionProperty = AvaloniaProperty.Register<MainWindow, string>(
+    nameof(CurrentVersion)
+  );
+
+  public static readonly StyledProperty<string> LatestVersionProperty = AvaloniaProperty.Register<MainWindow, string>(
+    nameof(LatestVersion)
+  );
+
   private readonly GitHubService _gitHubService;
 
   public MainWindow()
@@ -18,6 +29,24 @@ public partial class MainWindow : Window
     _gitHubService = new GitHubService();
 
     Load();
+  }
+
+  public bool IsUpdateAvailable
+  {
+    get => GetValue(IsUpdateAvailableProperty);
+    set => SetValue(IsUpdateAvailableProperty, value);
+  }
+
+  public string CurrentVersion
+  {
+    get => GetValue(CurrentVersionProperty);
+    set => SetValue(CurrentVersionProperty, value);
+  }
+
+  public string LatestVersion
+  {
+    get => GetValue(LatestVersionProperty);
+    set => SetValue(LatestVersionProperty, value);
   }
 
   private async void Load()
@@ -38,35 +67,5 @@ public partial class MainWindow : Window
 
     if (latestVersion != currentVersion)
       IsUpdateAvailable = true;
-  }
-
-  public static readonly StyledProperty<bool> IsUpdateAvailableProperty = AvaloniaProperty.Register<MainWindow, bool>(
-    nameof(IsUpdateAvailable)
-  );
-
-  public bool IsUpdateAvailable
-  {
-    get => GetValue(IsUpdateAvailableProperty);
-    set => SetValue(IsUpdateAvailableProperty, value);
-  }
-
-  public static readonly StyledProperty<string> CurrentVersionProperty = AvaloniaProperty.Register<MainWindow, string>(
-    nameof(CurrentVersion)
-  );
-
-  public string CurrentVersion
-  {
-    get => GetValue(CurrentVersionProperty);
-    set => SetValue(CurrentVersionProperty, value);
-  }
-
-  public static readonly StyledProperty<string> LatestVersionProperty = AvaloniaProperty.Register<MainWindow, string>(
-    nameof(LatestVersion)
-  );
-
-  public string LatestVersion
-  {
-    get => GetValue(LatestVersionProperty);
-    set => SetValue(LatestVersionProperty, value);
   }
 }
