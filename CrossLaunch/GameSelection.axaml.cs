@@ -35,7 +35,7 @@ public partial class GameSelection : UserControl
 
     _gameService = new GameService();
 
-    Foo();
+    Load();
   }
 
   public bool IsGameRunning
@@ -56,7 +56,7 @@ public partial class GameSelection : UserControl
     set => SetValue(ItemsProperty, value);
   }
 
-  private async void Foo()
+  private async void Load()
   {
     var games = await _gameService.GetGames();
 

@@ -10,7 +10,8 @@
         WindowState="Maximized"
         TransparencyLevelHint="AcrylicBlur"
         Background="Transparent"
-        ExtendClientAreaToDecorationsHint="True">
+        ExtendClientAreaToDecorationsHint="True"
+        x:DataType="crossLaunch:MainWindow">
   <Panel>
     <ExperimentalAcrylicBorder IsHitTestVisible="False">
       <ExperimentalAcrylicBorder.Material>
@@ -21,14 +22,22 @@
           MaterialOpacity="0.65" />
       </ExperimentalAcrylicBorder.Material>
     </ExperimentalAcrylicBorder>
-    <Grid RowDefinitions="Auto,*" Margin="40,50,40,40">
-      <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="20,0,20,20" VerticalAlignment="Center">
+    <Grid RowDefinitions="Auto,*,Auto" Margin="40,50,40,40">
+      <StackPanel Grid.Row="0" Margin="20,0,20,20" VerticalAlignment="Center" Orientation="Horizontal">
         <Image Source="Assets/Images/CrossLaunch-Logo7_80x80.png" Width="80" Height="80" />
         <TextBlock FontWeight="Bold" FontSize="36" TextAlignment="Center" Padding="20" Foreground="White">
           CrossLaunch
         </TextBlock>
       </StackPanel>
       <crossLaunch:GameSelection Grid.Row="1" IsHitTestVisible="True" />
+      <Grid Grid.Row="2" ColumnDefinitions="*,*" Margin="20,0,20,0" VerticalAlignment="Bottom">
+        <TextBlock Grid.Column="0" Text="{Binding CurrentVersion}" VerticalAlignment="Bottom" Foreground="LightGray"
+                   FontSize="18" HorizontalAlignment="Left" />
+        <HyperlinkButton Grid.Column="1" IsVisible="{Binding IsUpdateAvailable}"
+                         Content="{Binding LatestVersion, StringFormat= 'Update available: \{0\}'}"
+                         NavigateUri="https://github.com/DerStimmler/CrossLaunch/releases/latest"
+                         HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="LightGray" FontSize="18" />
+      </Grid>
     </Grid>
   </Panel>
 </Window>
